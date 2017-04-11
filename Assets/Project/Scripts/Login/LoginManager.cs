@@ -34,7 +34,6 @@ public class LoginManager : MonoBehaviour {
     public void SuccessLogin(WWW www)
     {
         Debug.Log("success Login");
-        Debug.Log(www.text);
     }
 
     public void FailedLogin(WWW www)

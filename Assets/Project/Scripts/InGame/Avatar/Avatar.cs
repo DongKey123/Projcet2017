@@ -45,7 +45,6 @@ public class Avatar : MonoBehaviour {
     void Start () {
         stateMachine = new StateMachine<Avatar>();
         stateMachine.Initial_Setting(this,AvatarFSMIdle.Instance);
-        StartCoroutine(ConnectServer());
         StartCoroutine(SendPosition());
     }
 	
@@ -70,39 +69,31 @@ public class Avatar : MonoBehaviour {
         stateMachine.StateRevert();
     }
 
-    IEnumerator ConnectServer()
-    {
-        _Socket = new WebSocket("ws://" + _url + "/user/move");
-        _Socket.OnMessage += ReceiveMessage;
-        _Socket.Connect();
-        yield return null;
-    }
-
-    void ReceiveMessage(object sender, MessageEventArgs e)
-    {
-        
-    }
-
     IEnumerator SendPosition()
     {
+        NetManager nm = NetManager.GetInstance();
         while (true)
         {
-            if (!_Socket.IsAlive)
+            if (!nm.m_IsAliveServer)
                 yield return null;
 
-            Debug.Log("Send");
+            //Debug.Log("Send");
 
             JSONObject json = new JSONObject();
+            JSONObject DirVec = new JSONObject();
+            DirVec.AddField("X", this.m_LookVec.x);
+            DirVec.AddField("Y", this.m_LookVec.y);
+            DirVec.AddField("Z", this.m_LookVec.z);
 
-            json.AddField("UserName", "Control1");
-            json.AddField("x", this.transform.position.x);
-            json.AddField("y", this.transform.position.y);
-            json.AddField("z", this.transform.position.z);
-            json.AddField("dir", m_IsControling);
-            
-            _Socket.Send(json.ToString());
-            Debug.Log(json.ToString());
+            json.AddField("UserName", "Control2");
+            json.AddField("X", this.transform.position.x);
+            json.AddField("Y", this.transform.position.y);
+            json.AddField("Z", this.transform.position.z);
+            json.AddField("Dir", m_IsControling);
+            json.AddField("DirVector",DirVec);
 
+            //Debug.Log(json.ToString());
+            nm.SendMessage(SockeType.USERMOVE, json.ToString());
             yield return new WaitForSeconds(0.1f);
         }
     }
