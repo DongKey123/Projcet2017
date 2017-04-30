@@ -6,8 +6,11 @@ using System.Text;
 public class LoginManager : MonoBehaviour {
 
     private static LoginManager _instance;
-    string url = "http://localhost:8080";
+    string url = "http://13.124.98.25:8080";
     string test = "?user=hyejong&password=1234";
+
+    string _id;
+
     public static LoginManager GetInstance()
     {
         return _instance;
@@ -33,7 +36,8 @@ public class LoginManager : MonoBehaviour {
 
     public void SuccessLogin(WWW www)
     {
-        Debug.Log("success Login");
+        NetManager.GetInstance().m_userName = _id;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Lobby");
     }
 
     public void FailedLogin(WWW www)
@@ -44,6 +48,7 @@ public class LoginManager : MonoBehaviour {
     IEnumerator goLogin(string id,string password)
     {
         WWW www = new WWW(url + "?user=" + id + "&password=" + password);
+        _id = id;
         StartCoroutine(WaitForRequest(www));
 
         yield return null;
@@ -53,12 +58,15 @@ public class LoginManager : MonoBehaviour {
     {
         while (!www.isDone)
         {
-            Debug.Log("Call");
             yield return null;
         }
 
         if (www.error == null)
         {
+            if (www.responseHeaders.ContainsKey("SET-COOKIE"))
+            {
+                PlayerPrefs.SetString("COOKIE", www.responseHeaders["SET-COOKIE"]);
+            }
             SuccessLogin(www);
         }
         else

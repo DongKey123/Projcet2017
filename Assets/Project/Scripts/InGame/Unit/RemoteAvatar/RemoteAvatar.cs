@@ -49,7 +49,11 @@ public class RemoteAvatar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        if(m_curHp <= 0)
+        {
+            ChangeState(RemoteAvatarFSMDead.Instance);
+            return;
+        }
 
         if (NetManager.GetInstance().m_IsAliveServer)
         {
@@ -69,13 +73,9 @@ public class RemoteAvatar : MonoBehaviour {
                 _lastRecTime = 0;
                 _timeCk = false;
             }
-
-
-
         }
         else
         {
-            Debug.Log("Not Connect Server");
         }
     }
 

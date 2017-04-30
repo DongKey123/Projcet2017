@@ -5,8 +5,10 @@ using WebSocketSharp;
 public enum AvatarAct
 {
     IDLE,
-    ATTACK,
+    ATTACK_R,
+    ATTACK_L,
     MOVE,
+    SKILL,
     DEATH
 };
 
@@ -23,6 +25,17 @@ public class Avatar : MonoBehaviour {
     [HideInInspector]
     public Vector3 m_LookVec;
 
+    [SerializeField]
+    bool _IsPVPMode = false;
+
+    public GameObject m_SkillPrefab;
+    public Transform m_SkillPos;
+
+    public AudioSource m_AttackAudio;
+    public AudioSource m_AttackMissAudio;
+    public AudioSource m_SkillAudio;
+    public AudioSource m_SKillEffectAudio;
+
     //유닛의 파라미터
     public int m_maxHp;                     //최대 체력
     public int m_curHp;                     //현재 체력
@@ -37,15 +50,24 @@ public class Avatar : MonoBehaviour {
     public float m_LifeSteal;               //피흡
     public float m_Armor;                   //방어력
     public float m_MovementSpeed;           //이동속도
-    
+
+
 
     protected StateMachine<Avatar> stateMachine = null;
+
+    public float m_MaxZ = 3f;
+    public float m_MinZ = -5f;
+
+    public float m_Damage;
 
     // Use this for initialization
     void Start () {
         stateMachine = new StateMachine<Avatar>();
         stateMachine.Initial_Setting(this,AvatarFSMIdle.Instance);
-        StartCoroutine(SendPosition());
+        if(_IsPVPMode)
+        {
+            StartCoroutine(SendPosition());
+        }
     }
 	
 	// Update is called once per frame
@@ -85,14 +107,16 @@ public class Avatar : MonoBehaviour {
             DirVec.AddField("Y", this.m_LookVec.y);
             DirVec.AddField("Z", this.m_LookVec.z);
 
-            json.AddField("UserName", "Control2");
+            json.AddField("UserName", "test2");
             json.AddField("X", this.transform.position.x);
             json.AddField("Y", this.transform.position.y);
             json.AddField("Z", this.transform.position.z);
+            //json.AddField("HP", this.m_Damage);
             json.AddField("Dir", m_IsControling);
-            json.AddField("DirVector",DirVec);
+            json.AddField("DirVector", DirVec);
 
-            //Debug.Log(json.ToString());
+            this.m_Damage = 0;
+
             nm.SendMessage(SockeType.USERMOVE, json.ToString());
             yield return new WaitForSeconds(0.1f);
         }

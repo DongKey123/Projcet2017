@@ -17,7 +17,7 @@ public class SpawnManager : MonoBehaviour {
 
 
     [SerializeField]
-    float m_spawnDelay = 1.0f;
+    float m_spawnDelay = 3.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -36,29 +36,21 @@ public class SpawnManager : MonoBehaviour {
             Spawn();
             yield return new WaitForSeconds(m_spawnDelay);
         }
-        yield return null;
     }
 
     void Spawn()
     {
-        GameObject ele0 = (GameObject)Instantiate(m_Elementalprefab[0], m_Spawns[0].position,Quaternion.identity);
-        GameObject ele1 = (GameObject)Instantiate(m_Elementalprefab[1], m_Spawns[1].position, Quaternion.identity);
-        GameObject ele2 = (GameObject)Instantiate(m_Elementalprefab[2], m_Spawns[2].position, Quaternion.identity);
+        GameObject ele = (GameObject)Instantiate(m_Elementalprefab[0], this.transform.position,Quaternion.identity);
+        ele.GetComponent<Elemental>().m_UnitAct = ElementalACT.MOVE;
+        ele.transform.LookAt(ele.transform.position - Vector3.right);
+        ele.GetComponent<Elemental>().m_HUDTr = GameObject.Find("Panel HUD").transform;
 
-        GameObject hpbar0 = (GameObject)Instantiate(m_HUDHpBarprefab,m_HUDPanel);
-        hpbar0.GetComponent<HUDHpBar>().m_type = UnitType.ELEMENTAL;
-        hpbar0.GetComponent<HUDHpBar>().m_Unit = ele0;
-        hpbar0.GetComponent<HUDHpBar>().m_HeadUpPosition = ele0.transform.FindChild("HeadUpPosition");
+        //GameObject hpbarObj = (GameObject)Instantiate(m_HUDHpBarprefab,m_HUDPanel);
+        //HUDHpBar hpbar = hpbarObj.GetComponent<HUDHpBar>();
+        //hpbar.GetComponent<HUDHpBar>().m_type = UnitType.ELEMENTAL;
+        //hpbar.GetComponent<HUDHpBar>().m_Unit = ele;
+        //hpbar.GetComponent<HUDHpBar>().m_HeadUpPosition = ele.transform.FindChild("HeadUpPosition");
 
-        GameObject hpbar1 = (GameObject)Instantiate(m_HUDHpBarprefab, m_HUDPanel);
-        hpbar1.GetComponent<HUDHpBar>().m_type = UnitType.ELEMENTAL;
-        hpbar1.GetComponent<HUDHpBar>().m_Unit = ele1;
-        hpbar1.GetComponent<HUDHpBar>().m_HeadUpPosition = ele1.transform.FindChild("HeadUpPosition");
-
-        GameObject hpbar2 = (GameObject)Instantiate(m_HUDHpBarprefab, m_HUDPanel);
-        hpbar2.GetComponent<HUDHpBar>().m_type = UnitType.ELEMENTAL;
-        hpbar2.GetComponent<HUDHpBar>().m_Unit = ele2;
-        hpbar2.GetComponent<HUDHpBar>().m_HeadUpPosition = ele2.transform.FindChild("HeadUpPosition");
 
 
     }

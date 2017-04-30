@@ -6,6 +6,14 @@ public class CustomizeButton : MonoBehaviour ,IPointerClickHandler{
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Customize Scene");
+        GameObject.Find("button").GetComponent<AudioSource>().Play();
+        StartCoroutine(LoadScene());
+    }
+
+    IEnumerator LoadScene()
+    {
+        yield return new WaitForSeconds(0.3f);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("CustomizingScene");
+        yield return null;
     }
 }

@@ -38,7 +38,7 @@ public class AvatarFSMMove : FSM_State<Avatar> {
 
         //Quaternion.LookRotation((nextTile.transform.position - owner.transform.position).normalized);
         owner.transform.position += owner.m_LookVec * owner.m_MovementSpeed * Time.deltaTime;
-        owner.transform.position = new Vector3(owner.transform.position.x, owner.transform.position.y, Mathf.Clamp(owner.transform.position.z,-5,3));
+        owner.transform.position = new Vector3(owner.transform.position.x, owner.transform.position.y, Mathf.Clamp(owner.transform.position.z,owner.m_MinZ, owner.m_MaxZ));
         owner.transform.rotation = Quaternion.LookRotation(owner.m_LookVec);
     }
 

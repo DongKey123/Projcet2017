@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class chatting : MonoBehaviour {
 
     WebSocket m_socket;
-    private string _url = "localhost:8080";
+    private string _url = "13.124.98.25:8090";
     List<string> messagesBox;
 
     public Text[] m_Message;
@@ -58,13 +58,6 @@ public class chatting : MonoBehaviour {
         m_socket = new WebSocket("ws://" + _url + "/echo");
         m_socket.OnMessage += ReceiveMessage;
         m_socket.Connect();
-        yield return null;
-    }
-
-    IEnumerator ReceiveMessage(string message)
-    {
-        
-
         yield return null;
     }
 

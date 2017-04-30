@@ -4,13 +4,11 @@ using UnityEngine.EventSystems;
 
 public class Skill1Button : MonoBehaviour ,IPointerClickHandler{
 
-    /// <summary>
-    /// Test용
-    /// </summary>
-    public Player player;
 
-	// Use this for initialization
-	void Start () {
+    public Avatar m_Avatar;
+
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
@@ -22,7 +20,7 @@ public class Skill1Button : MonoBehaviour ,IPointerClickHandler{
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        player.ChangeState(PlayerFSMSkill1.Instance);
+        m_Avatar.ChangeState(AvatarFSMSkill.Instance);
     }
 
 }

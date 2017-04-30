@@ -26,7 +26,12 @@ public class AvatarFSMIdle : FSM_State<Avatar> {
 
     public override void UpdateState(Avatar owner)
     {
+        if (owner.m_Joystick == null)
+            return;
+
         JoyStick stick = owner.m_Joystick;
+        
+
         if (stick.GetHorizontalValue() != 0 || stick.GetVerticalValue() != 0)
         {
             owner.ChangeState(AvatarFSMMove.Instance);

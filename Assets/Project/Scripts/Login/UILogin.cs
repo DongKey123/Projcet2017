@@ -20,6 +20,7 @@ public class UILogin : MonoBehaviour ,IPointerClickHandler {
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        GameObject.Find("button").GetComponent<AudioSource>().Play();
         LoginManager.GetInstance().Login(m_ID.text, m_Password.text);
     }
 }
